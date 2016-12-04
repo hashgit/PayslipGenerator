@@ -5,6 +5,18 @@ VisualStudioVersion = 14.0.25420.1
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PayslipGenerator", "PayslipGenerator\PayslipGenerator.csproj", "{8C662475-3D0E-45DA-9385-E09E5E5DEDDE}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PayslipGenerator.Lib", "PayslipGenerator.Lib\PayslipGenerator.Lib.csproj", "{DB83596E-6750-499E-849B-6937FCB54414}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Lib", "Lib", "{F28083A5-37B8-4C3A-B0AC-A77D3EB7F419}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PayslipGenerator.DataReader", "PayslipGenerator.DataReader\PayslipGenerator.DataReader.csproj", "{6F8E350D-2C22-466A-B7DA-0FBCDC89100D}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PayslipGenerator.Utils", "PayslipGenerator.Utils\PayslipGenerator.Utils.csproj", "{FF0BDD21-8AB9-49A5-914C-DE87BB0C22F7}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{44B15EF7-77A0-40F6-849C-1DECD56009F2}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PayslipGenerator.Tests", "PayslipGenerator.Tests\PayslipGenerator.Tests.csproj", "{95B8C231-6B79-49B9-B54F-FA3E4121C885}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -15,8 +27,29 @@ Global
 		{8C662475-3D0E-45DA-9385-E09E5E5DEDDE}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{8C662475-3D0E-45DA-9385-E09E5E5DEDDE}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{8C662475-3D0E-45DA-9385-E09E5E5DEDDE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DB83596E-6750-499E-849B-6937FCB54414}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DB83596E-6750-499E-849B-6937FCB54414}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DB83596E-6750-499E-849B-6937FCB54414}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DB83596E-6750-499E-849B-6937FCB54414}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6F8E350D-2C22-466A-B7DA-0FBCDC89100D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6F8E350D-2C22-466A-B7DA-0FBCDC89100D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6F8E350D-2C22-466A-B7DA-0FBCDC89100D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6F8E350D-2C22-466A-B7DA-0FBCDC89100D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FF0BDD21-8AB9-49A5-914C-DE87BB0C22F7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FF0BDD21-8AB9-49A5-914C-DE87BB0C22F7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FF0BDD21-8AB9-49A5-914C-DE87BB0C22F7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FF0BDD21-8AB9-49A5-914C-DE87BB0C22F7}.Release|Any CPU.Build.0 = Release|Any CPU
+		{95B8C231-6B79-49B9-B54F-FA3E4121C885}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{95B8C231-6B79-49B9-B54F-FA3E4121C885}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{95B8C231-6B79-49B9-B54F-FA3E4121C885}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{95B8C231-6B79-49B9-B54F-FA3E4121C885}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{DB83596E-6750-499E-849B-6937FCB54414} = {F28083A5-37B8-4C3A-B0AC-A77D3EB7F419}
+		{6F8E350D-2C22-466A-B7DA-0FBCDC89100D} = {F28083A5-37B8-4C3A-B0AC-A77D3EB7F419}
+		{95B8C231-6B79-49B9-B54F-FA3E4121C885} = {44B15EF7-77A0-40F6-849C-1DECD56009F2}
 	EndGlobalSection
 EndGlobal
