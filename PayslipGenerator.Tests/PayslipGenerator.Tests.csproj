@@ -35,6 +35,10 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="AutoMapper, Version=5.2.0.0, Culture=neutral, PublicKeyToken=be96cd2c38ef1005, processorArchitecture=MSIL">
+      <HintPath>..\packages\AutoMapper.5.2.0\lib\net45\AutoMapper.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="nunit.framework, Version=3.5.0.0, Culture=neutral, PublicKeyToken=2638cd05610744eb, processorArchitecture=MSIL">
       <HintPath>..\packages\NUnit.3.5.0\lib\net45\nunit.framework.dll</HintPath>
       <Private>True</Private>
@@ -51,6 +55,7 @@
   </Choose>
   <ItemGroup>
     <Compile Include="CsvTests.cs" />
+    <Compile Include="MapperTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -60,6 +65,10 @@
     <ProjectReference Include="..\PayslipGenerator.DataReader\PayslipGenerator.DataReader.csproj">
       <Project>{6F8E350D-2C22-466A-B7DA-0FBCDC89100D}</Project>
       <Name>PayslipGenerator.DataReader</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\PayslipGenerator.Lib\PayslipGenerator.Lib.csproj">
+      <Project>{DB83596E-6750-499E-849B-6937FCB54414}</Project>
+      <Name>PayslipGenerator.Lib</Name>
     </ProjectReference>
     <ProjectReference Include="..\PayslipGenerator.Utils\PayslipGenerator.Utils.csproj">
       <Project>{FF0BDD21-8AB9-49A5-914C-DE87BB0C22F7}</Project>

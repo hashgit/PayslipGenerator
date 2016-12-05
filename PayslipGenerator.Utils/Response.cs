@@ -1,7 +1,6 @@
 ﻿namespace PayslipGenerator.Utils
 {
     public class Response<T>
-        where T : class 
     {
         public ResponseCode Code { get; private set; }
         public string Message { get; private set; }
@@ -21,7 +20,7 @@
 
         public static Response<T> Error(string message)
         {
-            return new Response<T>(ResponseCode.Error, message, null);
+            return new Response<T>(ResponseCode.Error, message, default(T));
         }
     }
 }
