@@ -48,6 +48,10 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Calculators\ISuperCalculator.cs" />
+    <Compile Include="Calculators\ITaxCalculator.cs" />
+    <Compile Include="Calculators\SuperCalculator.cs" />
+    <Compile Include="Calculators\TaxCalculator.cs" />
     <Compile Include="ComponentRegistrar.cs" />
     <Compile Include="InputData.cs" />
     <Compile Include="InputType.cs" />

@@ -27,7 +27,14 @@ namespace PayslipGenerator.Lib
             if (inputDataResponse.Code == ResponseCode.Error)
                 return Response<bool>.Error(inputDataResponse.Message);
 
-
+            // process all salary data one by one, write an error for invalid data
+            if (inputDataResponse.Data != null)
+            {
+                foreach (var inputData in inputDataResponse.Data)
+                {
+                    
+                }
+            }
 
             return Response<bool>.From(true);
         }

@@ -18,20 +18,22 @@ namespace PayslipGenerator.Lib.Mapper
             return config;
         }
 
-        public class StringToStartDateResolver : IMemberValueResolver<SalaryInfo, InputData, string, DateTime>
+        public abstract class StringToDateResolver : IMemberValueResolver<SalaryInfo, InputData, string, DateTime>
         {
+            protected abstract int GetDatePart();
             public DateTime Resolve(SalaryInfo source, InputData destination, string sourceMember, DateTime destMember,
                 ResolutionContext context)
             {
                 if (string.IsNullOrWhiteSpace(sourceMember))
                     throw new ArgumentException("Salary period is required");
 
-                var parts = sourceMember.Split(new[] {"-"}, StringSplitOptions.RemoveEmptyEntries);
-                if (parts.Length < 1)
+                var parts = sourceMember.Split(new[] { "–", "-" }, StringSplitOptions.RemoveEmptyEntries);
+                var datePart = GetDatePart();
+                if (parts.Length < datePart)
                     throw new FormatException($"Invalid salary period '{sourceMember}'");
 
                 DateTime value;
-                if (DateTime.TryParseExact(parts[0].Trim(), "DD Mon", CultureInfo.InvariantCulture, DateTimeStyles.None,
+                if (DateTime.TryParseExact(parts[datePart-1].Trim(), "dd MMMM", CultureInfo.InvariantCulture, DateTimeStyles.None,
                     out value))
                     return value;
 
@@ -39,24 +41,19 @@ namespace PayslipGenerator.Lib.Mapper
             }
         }
 
-        public class StringToEndDateResolver : IMemberValueResolver<SalaryInfo, InputData, string, DateTime>
+        public class StringToStartDateResolver : StringToDateResolver
         {
-            public DateTime Resolve(SalaryInfo source, InputData destination, string sourceMember, DateTime destMember,
-                ResolutionContext context)
+            protected override int GetDatePart()
             {
-                if (string.IsNullOrWhiteSpace(sourceMember))
-                    throw new ArgumentException("Salary period is required");
+                return 1;
+            }
+        }
 
-                var parts = sourceMember.Split(new[] { "-" }, StringSplitOptions.RemoveEmptyEntries);
-                if (parts.Length < 2)
-                    throw new FormatException($"Invalid salary period '{sourceMember}'");
-
-                DateTime value;
-                if (DateTime.TryParseExact(parts[1].Trim(), "DD Mon", CultureInfo.InvariantCulture, DateTimeStyles.None,
-                    out value))
-                    return value;
-
-                throw new FormatException($"Invalid salary period '{sourceMember}'");
+        public class StringToEndDateResolver : StringToDateResolver
+        {
+            protected override int GetDatePart()
+            {
+                return 2;
             }
         }
 
@@ -66,10 +63,10 @@ namespace PayslipGenerator.Lib.Mapper
                 ResolutionContext context)
             {
                 decimal value;
-                if (decimal.TryParse(sourceMember, out value))
+                if (decimal.TryParse(sourceMember.TrimEnd('%', ' '), out value))
                     return value;
 
-                throw new FormatException($"{sourceMember} is not a valid decimal value.");
+                throw new FormatException($"'{sourceMember}' is not a valid decimal value.");
             }
         }
     }
