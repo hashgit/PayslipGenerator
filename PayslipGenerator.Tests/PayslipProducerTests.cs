@@ -13,6 +13,7 @@ namespace PayslipGenerator.Tests
     {
         [TestCase("Joe", "Bald", 9, 60050, "01 March", "31 March")]
         [TestCase("Joe", "Bald", 9, 120000, "01 March", "31 March")]
+        [TestCase("Joe", "Bald", 9, 120000, "01 February", "29 February")]
         public void CanProduceAValidPayslip(string firstName, string lastName,
             decimal super, decimal annualSalary, string startDate, string endDate)
         {
@@ -38,7 +39,7 @@ namespace PayslipGenerator.Tests
             var response = producer.GenerateSlip(data);
 
             Assert.IsNotNull(response);
-            Assert.AreEqual(response.Code, ResponseCode.Ok);
+            Assert.AreEqual(ResponseCode.Ok, response.Code);
             Assert.AreEqual(data.FirstName, response.Data.FirstName);
             Assert.AreEqual(data.LastName, response.Data.LastName);
             Assert.AreEqual(response.Data.GrossIncome, decimal.Round(data.AnnualSalary / 12));
