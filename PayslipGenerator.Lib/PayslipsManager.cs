@@ -45,18 +45,11 @@ namespace PayslipGenerator.Lib
         {
             var dataReader = _salaryDataReader[request.InputType];
             var info = dataReader.GetData(request.Filename);
+            if (info.Code == ResponseCode.Error)
+                return Response<IList<InputData>>.Error(info.Message);
 
-            var mappingConfig = _dataMapper.Configure();
-            var mapper = mappingConfig.CreateMapper();
-            try
-            {
-                var inputs = mapper.Map<IList<InputData>>(info);
-                return Response<IList<InputData>>.From(inputs);
-            }
-            catch (Exception e)
-            {
-                return Response<IList<InputData>>.Error(e.Message);
-            }
+            var input = _dataMapper.Map<IList<SalaryInfo>, IList<InputData>>(info.Data);
+            return input;
         }
     }
 }

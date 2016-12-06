@@ -1,9 +1,9 @@
-﻿using AutoMapper;
+﻿using PayslipGenerator.Utils;
 
 namespace PayslipGenerator.Lib.Mapper
 {
     public interface IDataMapper
     {
-        MapperConfiguration Configure();
+        Response<TOut> Map<TIn, TOut>(TIn data);
     }
 }

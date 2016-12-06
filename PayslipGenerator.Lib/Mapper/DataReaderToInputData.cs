@@ -2,20 +2,41 @@
 using System.Globalization;
 using AutoMapper;
 using PayslipGenerator.DataReader;
+using PayslipGenerator.Utils;
 
 namespace PayslipGenerator.Lib.Mapper
 {
     public class DataReaderToInputData : IDataMapper
     {
-        public MapperConfiguration Configure()
-        {
-            var config = new MapperConfiguration(cfg => cfg.CreateMap<SalaryInfo, InputData>()
-                .ForMember(d => d.AnnualSalary, opt => opt.ResolveUsing<StringToDecimalResolver, string>(s => s.AnnualSalary))
-                .ForMember(d => d.Superannuation, opt => opt.ResolveUsing<StringToDecimalResolver, string>(s => s.Superannuation))
-                .ForMember(d => d.StartDate, opt => opt.ResolveUsing<StringToStartDateResolver, string>(s => s.Period))
-                .ForMember(d => d.EndDate, opt => opt.ResolveUsing<StringToEndDateResolver, string>(s => s.Period)));
+        private MapperConfiguration _configuration;
 
-            return config;
+        public Response<TOut> Map<TIn, TOut>(TIn data)
+        {
+            var mappingConfig = Configure();
+            var mapper = mappingConfig.CreateMapper();
+            try
+            {
+                var inputs = mapper.Map<TOut>(data);
+                return Response<TOut>.From(inputs);
+            }
+            catch (Exception e)
+            {
+                return Response<TOut>.Error(e.Message);
+            }
+        }
+
+        private MapperConfiguration Configure()
+        {
+            if (_configuration == null)
+            {
+                _configuration = new MapperConfiguration(cfg => cfg.CreateMap<SalaryInfo, InputData>()
+                    .ForMember(d => d.AnnualSalary, opt => opt.ResolveUsing<StringToDecimalResolver, string>(s => s.AnnualSalary))
+                    .ForMember(d => d.Superannuation, opt => opt.ResolveUsing<StringToDecimalResolver, string>(s => s.Superannuation))
+                    .ForMember(d => d.StartDate, opt => opt.ResolveUsing<StringToStartDateResolver, string>(s => s.Period))
+                    .ForMember(d => d.EndDate, opt => opt.ResolveUsing<StringToEndDateResolver, string>(s => s.Period)));
+            }
+
+            return _configuration;
         }
 
         public abstract class StringToDateResolver : IMemberValueResolver<SalaryInfo, InputData, string, DateTime>
