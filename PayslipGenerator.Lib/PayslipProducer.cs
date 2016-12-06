@@ -1,60 +1,63 @@
-﻿using System;
-using System.Collections.Generic;
-using Autofac.Features.Indexed;
-using PayslipGenerator.DataReader;
-using PayslipGenerator.Lib.Mapper;
+﻿using PayslipGenerator.Lib.Calculators;
 using PayslipGenerator.Utils;
 
 namespace PayslipGenerator.Lib
 {
     public class PayslipProducer : IPayslipProducer
     {
-        private readonly IIndex<InputType, ISalaryDataReader> _salaryDataReader;
-        private readonly IDataMapper _dataMapper;
+        private readonly ITaxCalculator _taxCalculator;
+        private readonly ISuperCalculator _superCalculator;
 
-        public PayslipProducer(IIndex<InputType, ISalaryDataReader> salaryDataReader, IDataMapper dataMapper)
+        public PayslipProducer(ITaxCalculator taxCalculator, ISuperCalculator superCalculator)
         {
-            _salaryDataReader = salaryDataReader;
-            _dataMapper = dataMapper;
+            _taxCalculator = taxCalculator;
+            _superCalculator = superCalculator;
         }
 
-        public Response<bool> Execute(PayslipRequest request)
+        public Response<SalarySlip> GenerateSlip(InputData salaryData)
         {
-            if (request.InputType == InputType.Unknown)
-                return Response<bool>.Error("Unknown input data type");
+            var sanityErrors = ValidateInput(salaryData);
+            if (sanityErrors != null) return sanityErrors;
 
-            var inputDataResponse = GetMappedInputData(request);
-            if (inputDataResponse.Code == ResponseCode.Error)
-                return Response<bool>.Error(inputDataResponse.Message);
+            var annualTax = _taxCalculator.Calculate(salaryData);
+            var annualSuper = _superCalculator.Calculate(salaryData);
+            var monthlyTax = decimal.Round(annualTax/12);
 
-            // process all salary data one by one, write an error for invalid data
-            if (inputDataResponse.Data != null)
+            var salarySlip = new SalarySlip
             {
-                foreach (var inputData in inputDataResponse.Data)
-                {
-                    
-                }
-            }
+                FirstName = salaryData.FirstName,
+                LastName = salaryData.LastName,
+                Tax = monthlyTax,
+                Super = decimal.Round(annualSuper / 12),
+                GrossIncome = decimal.Round(salaryData.AnnualSalary / 12),
+                PayPeriod = $"{salaryData.StartDate:dd MMMM} - {salaryData.EndDate:dd MMMM}",
+            };
 
-            return Response<bool>.From(true);
+            salarySlip.NetIncome = salarySlip.GrossIncome - monthlyTax;
+            return Response<SalarySlip>.From(salarySlip);
         }
 
-        private Response<IList<InputData>> GetMappedInputData(PayslipRequest request)
+        private Response<SalarySlip> ValidateInput(InputData salaryData)
         {
-            var dataReader = _salaryDataReader[request.InputType];
-            var info = dataReader.GetData(request.Filename);
+            if (salaryData == null)
+                return Response<SalarySlip>.Error("Salary data not provided");
 
-            var mappingConfig = _dataMapper.Configure();
-            var mapper = mappingConfig.CreateMapper();
-            try
-            {
-                var inputs = mapper.Map<IList<InputData>>(info);
-                return Response<IList<InputData>>.From(inputs);
-            }
-            catch (Exception e)
-            {
-                return Response<IList<InputData>>.Error(e.Message);
-            }
+            if (string.IsNullOrWhiteSpace(salaryData.FirstName))
+                return Response<SalarySlip>.Error($"{nameof(salaryData.FirstName)} not provided");
+
+            if (string.IsNullOrWhiteSpace(salaryData.LastName))
+                return Response<SalarySlip>.Error($"{nameof(salaryData.LastName)} not provided");
+
+            if (salaryData.AnnualSalary <= 0)
+                return Response<SalarySlip>.Error($"{nameof(salaryData.AnnualSalary)} should be greater than zero");
+
+            if (salaryData.Superannuation < 9 || salaryData.Superannuation > 50)
+                return Response<SalarySlip>.Error($"{salaryData.Superannuation} should be between 9-50% inclusive");
+
+            if (salaryData.StartDate.Month != salaryData.EndDate.Month)
+                return Response<SalarySlip>.Error($"Salary period should lie within a month");
+
+            return null;
         }
     }
 }

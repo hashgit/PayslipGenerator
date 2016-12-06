@@ -56,11 +56,14 @@
     <Compile Include="InputData.cs" />
     <Compile Include="InputType.cs" />
     <Compile Include="IPayslipProducer.cs" />
+    <Compile Include="IPayslipsManager.cs" />
     <Compile Include="Mapper\DataReaderToInputData.cs" />
     <Compile Include="Mapper\IDataMapper.cs" />
     <Compile Include="PayslipProducer.cs" />
+    <Compile Include="PayslipsManager.cs" />
     <Compile Include="PayslipRequest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="SalarySlip.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\PayslipGenerator.DataReader\PayslipGenerator.DataReader.csproj">
