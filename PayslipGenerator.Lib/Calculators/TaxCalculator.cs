@@ -9,6 +9,8 @@ namespace PayslipGenerator.Lib.Calculators
 
         public TaxCalculator()
         {
+            // TODO: this tax tiers can be added to a configuration file
+            // Do you we really need it?
             _tiers.Add(new Tier { StartValue = 0, BaseTax = 0, Factor = 0 });
             _tiers.Add(new Tier { StartValue = 18201, BaseTax = 0, Factor = 0.19m });
             _tiers.Add(new Tier { StartValue = 37001, BaseTax = 3572, Factor = 0.325m });

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Globalization;
 using Moq;
 using NUnit.Framework;
 using PayslipGenerator.Lib;
@@ -13,16 +14,19 @@ namespace PayslipGenerator.Tests
         [TestCase("Joe", "Bald", 9, 60050, "01 March", "31 March")]
         [TestCase("Joe", "Bald", 9, 120000, "01 March", "31 March")]
         public void CanProduceAValidPayslip(string firstName, string lastName,
-            decimal super, decimal annualSalary, DateTime startDate, DateTime endDate)
+            decimal super, decimal annualSalary, string startDate, string endDate)
         {
+            var sDate = DateTime.ParseExact(startDate, "dd MMMM", CultureInfo.InvariantCulture, DateTimeStyles.None);
+            var eDate = DateTime.ParseExact(endDate, "dd MMMM", CultureInfo.InvariantCulture, DateTimeStyles.None);
+
             var data = new InputData
             {
                 Superannuation = super,
                 AnnualSalary = annualSalary,
                 FirstName = firstName,
                 LastName = lastName,
-                StartDate = startDate,
-                EndDate = endDate
+                StartDate = sDate,
+                EndDate = eDate
             };
 
             var taxCalculatorMock = new Mock<ITaxCalculator>();
@@ -46,6 +50,8 @@ namespace PayslipGenerator.Tests
         [TestCase("Joe", "Bald", 60, 120000, "01 March", "31 March")]
         [TestCase("Joe", "Bald", 11, 0, "01 March", "31 March")]
         [TestCase("Joe", "Bald", 11, 60000, "01 March", "31 May")]
+        [TestCase("Joe", "Bald", 11, 60000, "01 March", "20 March")]
+        [TestCase("Joe", "Bald", 11, 60000, "02 March", "31 March")]
         public void CanGetErrorsForInvalidSalaryData(string firstName, string lastName,
             decimal super, decimal annualSalary, DateTime startDate, DateTime endDate)
         {

@@ -55,10 +55,23 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\PayslipGenerator.DataReader\PayslipGenerator.DataReader.csproj">
+      <Project>{6F8E350D-2C22-466A-B7DA-0FBCDC89100D}</Project>
+      <Name>PayslipGenerator.DataReader</Name>
+    </ProjectReference>
     <ProjectReference Include="..\PayslipGenerator.Lib\PayslipGenerator.Lib.csproj">
       <Project>{db83596e-6750-499e-849b-6937fcb54414}</Project>
       <Name>PayslipGenerator.Lib</Name>
     </ProjectReference>
+    <ProjectReference Include="..\PayslipGenerator.Utils\PayslipGenerator.Utils.csproj">
+      <Project>{FF0BDD21-8AB9-49A5-914C-DE87BB0C22F7}</Project>
+      <Name>PayslipGenerator.Utils</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="TestData\Data1.txt">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

@@ -1,8 +1,12 @@
-﻿using PayslipGenerator.Lib.Calculators;
+﻿using System;
+using PayslipGenerator.Lib.Calculators;
 using PayslipGenerator.Utils;
 
 namespace PayslipGenerator.Lib
 {
+    /// <summary>
+    /// Implementation of a single salary slip generator
+    /// </summary>
     public class PayslipProducer : IPayslipProducer
     {
         private readonly ITaxCalculator _taxCalculator;
@@ -16,9 +20,11 @@ namespace PayslipGenerator.Lib
 
         public Response<SalarySlip> GenerateSlip(InputData salaryData)
         {
+            // First we make sure all data is correct as we expect
             var sanityErrors = ValidateInput(salaryData);
             if (sanityErrors != null) return sanityErrors;
 
+            // calculate the salary slip data
             var annualTax = _taxCalculator.Calculate(salaryData);
             var annualSuper = _superCalculator.Calculate(salaryData);
             var monthlyTax = decimal.Round(annualTax/12);
@@ -39,9 +45,11 @@ namespace PayslipGenerator.Lib
 
         private Response<SalarySlip> ValidateInput(InputData salaryData)
         {
+            // sanity check
             if (salaryData == null)
                 return Response<SalarySlip>.Error("Salary data not provided");
 
+            // data which should be available as per requirements
             if (string.IsNullOrWhiteSpace(salaryData.FirstName))
                 return Response<SalarySlip>.Error($"{nameof(salaryData.FirstName)} not provided");
 
@@ -54,8 +62,16 @@ namespace PayslipGenerator.Lib
             if (salaryData.Superannuation < 9 || salaryData.Superannuation > 50)
                 return Response<SalarySlip>.Error($"{salaryData.Superannuation} should be between 9-50% inclusive");
 
+            // TODO: This is an assumption
+            // Pay period should fall within a month and should consist of one full month
             if (salaryData.StartDate.Month != salaryData.EndDate.Month)
-                return Response<SalarySlip>.Error($"Salary period should lie within a month");
+                return Response<SalarySlip>.Error($"Salary period should lie within a single month");
+
+            if (salaryData.StartDate.Day != 1)
+                return Response<SalarySlip>.Error($"Salary period should start from the first of the month");
+
+            if (salaryData.EndDate.Day != DateTime.DaysInMonth(salaryData.EndDate.Year, salaryData.EndDate.Month))
+                return Response<SalarySlip>.Error($"Salary period should end at the last day of the month");
 
             return null;
         }

@@ -6,6 +6,10 @@ using PayslipGenerator.Utils;
 
 namespace PayslipGenerator.Lib.Mapper
 {
+    /// <summary>
+    /// Mapping configuration
+    /// We read data in a certain format but map it to a more meaningful format inside the code
+    /// </summary>
     public class DataReaderToInputData : IDataMapper
     {
         private MapperConfiguration _configuration;
@@ -18,6 +22,10 @@ namespace PayslipGenerator.Lib.Mapper
             {
                 var inputs = mapper.Map<TOut>(data);
                 return Response<TOut>.From(inputs);
+            }
+            catch (AutoMapperMappingException e)
+            {
+                return Response<TOut>.Error(e.InnerException?.InnerException?.Message);
             }
             catch (Exception e)
             {

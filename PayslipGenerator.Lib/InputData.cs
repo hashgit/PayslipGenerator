@@ -2,6 +2,9 @@
 
 namespace PayslipGenerator.Lib
 {
+    /// <summary>
+    /// Transformed input data for ease of use
+    /// </summary>
     public class InputData
     {
         public string FirstName { get; set; }

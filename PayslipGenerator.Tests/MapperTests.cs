@@ -20,10 +20,9 @@ namespace PayslipGenerator.Tests
             Assert.AreEqual(rowCount, dataResponse.Data.Count);
 
             var mapper = new DataReaderToInputData();
-            var config = mapper.Configure();
-            var automapper = config.CreateMapper();
-            var inputData = automapper.Map<IList<InputData>>(dataResponse.Data);
-            Assert.AreEqual(rowCount, inputData.Count);
+            var inputData = mapper.Map<IList<SalaryInfo>, IList<InputData>>(dataResponse.Data);
+            Assert.AreEqual(ResponseCode.Ok, inputData.Code);
+            Assert.AreEqual(rowCount, inputData.Data.Count);
         }
 
         [TestCase("TestData\\Data6.txt", 1)]
@@ -35,18 +34,8 @@ namespace PayslipGenerator.Tests
             Assert.AreEqual(rowCount, dataResponse.Data.Count);
 
             var mapper = new DataReaderToInputData();
-            var config = mapper.Configure();
-            var automapper = config.CreateMapper();
-
-            try
-            {
-                var inputData = automapper.Map<IList<InputData>>(dataResponse.Data);
-                Assert.Fail("Exception was expected");
-            }
-            catch (Exception e)
-            {
-                Assert.IsInstanceOf<FormatException>(e.InnerException?.InnerException);
-            }
+            var inputData = mapper.Map<IList<SalaryInfo>, IList<InputData>>(dataResponse.Data);
+            Assert.AreEqual(ResponseCode.Error, inputData.Code);
         }
     }
 }
