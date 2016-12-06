@@ -5,7 +5,7 @@ This is a C# solution developed using VS2015. The solution consists of several a
 How to run
 ==========
 The solution contains a console application called "PayslipGenerator". The console application reads input from a CSV file called "Data1.txt"
-which should be available under {current executing directory}\\TestData. One such file is part of the solution already therefore solution
+which should be available under {current executing directory}\\TestData folder. One such file is part of the solution already therefore solution
 can be tested by pressing F5 which will execute the console app from within VS.
 
 Assumptions
